@@ -12,6 +12,13 @@ const SubmitBrand: React.FC = () => {
 
   const updateBrandHandler = (e: React.ChangeEvent<HTMLInputElement>, brand: Brand, ...argsImg: number[]) => {
     const [imageId, imageIndex] = argsImg;
+    const name = e.currentTarget.name;
+    if (name === 'checkAll') {
+      const { updateCheckboxList, updateBrandsList } = updateAllBrand(e, brand);
+      setBrandsList(updateBrandsList);
+      setImages(updateCheckboxList);
+      return;
+    }
     const updateImage = updateSingleBrand(e, brand, imageIndex);
     setImages(images.map((image) => (image.id === imageId ? updateImage : image)));
   };
@@ -27,9 +34,19 @@ const SubmitBrand: React.FC = () => {
     return (selectImage = { ...selectImage, brands: updateBrandsCheckbox });
   };
 
+  const updateAllBrand = (e: React.ChangeEvent<HTMLInputElement>, brand: Brand) => {
+    const checked = e.currentTarget.checked;
+    const updateCheckboxList: Image[] = images.map((image) => {
+      const updBrands = image.brands.map((br) => (br.id === brand.id ? { ...br, checked } : br));
+      return { ...image, brands: updBrands };
+    });
+    const updateBrandsList = brandsList.map((br) => (br.id === brand.id ? { ...br, checked } : br));
+    return { updateCheckboxList, updateBrandsList };
+  };
+
   return (
     <div className="container-home">
-      <BrandsList brandsList={brandsList} />
+      <BrandsList brandsList={brandsList} updateBrandHandler={updateBrandHandler} />
       {images.map((image, index) => (
         <div key={image.id}>
           <img src={image.link} alt="img" />

@@ -3,15 +3,17 @@ import { Brand } from './SubmitBrandTypes';
 
 interface BrandsListProps {
   brandsList: Brand[];
+  updateBrandHandler: (e: React.ChangeEvent<HTMLInputElement>, brand: Brand, ...argsImg: number[]) => void;
 }
 
-const BrandsList: React.FC<BrandsListProps> = ({ brandsList }) => {
+const BrandsList: React.FC<BrandsListProps> = ({ brandsList, updateBrandHandler }) => {
   return (
     <div className="brands-list">
       SELECT ALL BRANDS
       {brandsList.map((brand, i) => (
         <div className="form-check" key={brand.id}>
           <input
+            onChange={(e) => updateBrandHandler(e, brand)}
             type="checkbox"
             name="checkAll"
             className="form-check-input"
