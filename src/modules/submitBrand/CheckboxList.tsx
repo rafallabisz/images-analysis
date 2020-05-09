@@ -4,7 +4,7 @@ import { Image, Brand } from 'modules/submitBrand/SubmitBrandTypes';
 interface CheckboxListProps {
   image: Image;
   imgIndex: number;
-  updateBrandHandler: (e: React.ChangeEvent<HTMLInputElement>, brand: Brand, ...argImg: number[]) => void;
+  updateBrandHandler: (e: React.ChangeEvent<HTMLInputElement>, brand: Brand, ...argsImg: number[]) => void;
 }
 
 const CheckboxList: React.FC<CheckboxListProps> = ({ image, imgIndex, updateBrandHandler }) => {
