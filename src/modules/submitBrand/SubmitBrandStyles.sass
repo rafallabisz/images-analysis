@@ -1,2 +1,22 @@
 .container-home
-  display: flex
+  display: grid
+  grid-template-columns: minmax(auto,150px) repeat(auto-fit,minmax(150px,300px)) 
+  grid-template-rows: minmax(auto,183px) 1fr
+  min-height: calc(100vh - 56px)
+  padding: 25px
+
+.brands-list
+  grid-column: 1
+  grid-row: 2
+
+.wrap-elements
+  display: grid
+  justify-content: center
+
+.checkbox-list
+  text-align: center
+
+
+.view-json
+  text-align: center
+

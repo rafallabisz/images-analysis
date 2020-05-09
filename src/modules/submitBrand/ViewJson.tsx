@@ -7,7 +7,7 @@ interface ViewJsonProps {
 
 const ViewJson: React.FC<ViewJsonProps> = ({ image }) => {
   return (
-    <>
+    <div className="view-json">
       <span>{`{ 
       "imageId": ${image.id},
       "brands":[`}</span>
@@ -19,7 +19,7 @@ const ViewJson: React.FC<ViewJsonProps> = ({ image }) => {
         </div>
       ))}
       <div>]};</div>
-    </>
+    </div>
   );
 };
 export default ViewJson;

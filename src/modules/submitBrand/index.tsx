@@ -67,7 +67,7 @@ const SubmitBrand: React.FC = () => {
     <div className="container-home">
       <BrandsList brandsList={brandsList} updateBrandHandler={updateBrandHandler} />
       {images.map((image, index) => (
-        <div key={image.id}>
+        <div key={image.id} className="wrap-elements" style={{ gridColumnStart: `${index + 2}` }}>
           <img src={image.link} alt="img" />
           <CheckboxList image={image} imgIndex={index} updateBrandHandler={updateBrandHandler} />
           <ViewJson image={image} />

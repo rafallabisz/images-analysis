@@ -9,7 +9,6 @@ interface BrandsListProps {
 const BrandsList: React.FC<BrandsListProps> = ({ brandsList, updateBrandHandler }) => {
   return (
     <div className="brands-list">
-      SELECT ALL BRANDS
       {brandsList.map((brand, i) => (
         <div className="form-check" key={brand.id}>
           <input

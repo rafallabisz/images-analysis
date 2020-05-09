@@ -11,7 +11,7 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ image, imgIndex, updateBran
   return (
     <>
       {image.brands.map((brand, index) => (
-        <div className="form-check" key={brand.id}>
+        <div className="form-check checkbox-list" key={brand.id}>
           <input
             onChange={(e) => updateBrandHandler(e, brand, image.id, imgIndex)}
             checked={brand.checked}
@@ -19,7 +19,7 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ image, imgIndex, updateBran
             name={brand.name}
             className="form-check-input"
           />
-          <label className="form-check-label">{brand.name}</label>
+          <label className="form-check-label"></label>
         </div>
       ))}
     </>
