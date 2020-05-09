@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import data from 'data/data';
 import './SubmitBrandStyles.sass';
 import { Image, Brand } from './SubmitBrandTypes';
@@ -9,10 +9,29 @@ import BrandsList from './BrandsList';
 const SubmitBrand: React.FC = () => {
   const [images, setImages] = useState<Image[]>(data.images);
   const [brandsList, setBrandsList] = useState<Brand[]>([...images[0].brands]);
+  const [currBrandId, setCurrBrandId] = useState<number>(0);
+
+  useEffect(() => {
+    const isAllBrandChecked = checkIfAllBrandChecked(currBrandId, images);
+    const updateBrandsList = brandsList.map((brand) =>
+      brand.id === currBrandId ? { ...brand, checked: isAllBrandChecked } : brand,
+    );
+    setBrandsList(updateBrandsList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currBrandId, images]);
+
+  const checkIfAllBrandChecked = (currBrandId: number, images: Image[]) => {
+    const trackedBrand = images.flatMap((image: Image) =>
+      image.brands.filter((brand: Brand) => brand.id === currBrandId && brand.checked),
+    );
+    const isAllBrandChecked = images.length === trackedBrand.length && trackedBrand.every((br) => br.checked === true);
+    return isAllBrandChecked;
+  };
 
   const updateBrandHandler = (e: React.ChangeEvent<HTMLInputElement>, brand: Brand, ...argsImg: number[]) => {
     const [imageId, imageIndex] = argsImg;
     const name = e.currentTarget.name;
+    setCurrBrandId(brand.id);
     if (name === 'checkAll') {
       const { updateCheckboxList, updateBrandsList } = updateAllBrand(e, brand);
       setBrandsList(updateBrandsList);
