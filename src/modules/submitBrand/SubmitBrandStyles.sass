@@ -1,7 +1,7 @@
 .container-home
   display: grid
   grid-template-columns: minmax(auto,150px) repeat(auto-fit,minmax(150px,300px)) 
-  grid-template-rows: minmax(auto,183px) 1fr
+  grid-template-rows: minmax(auto,170px) 1fr
   min-height: calc(100vh - 56px)
   padding: 25px
 
@@ -9,13 +9,19 @@
   grid-column: 1
   grid-row: 2
 
+.brand-item
+
 .wrap-elements
   display: grid
   justify-content: center
 
 .checkbox-list
   text-align: center
+  &:nth-child(even)
+    background-color: #eee
 
+.images
+  height: 170px
 
 .view-json
   text-align: center

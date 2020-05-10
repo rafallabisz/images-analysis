@@ -10,7 +10,7 @@ const BrandsList: React.FC<BrandsListProps> = ({ brandsList, updateBrandHandler 
   return (
     <div className="brands-list">
       {brandsList.map((brand, i) => (
-        <div className="form-check" key={brand.id}>
+        <div className="form-check brand-item" key={brand.id}>
           <input
             onChange={(e) => updateBrandHandler(e, brand)}
             type="checkbox"
