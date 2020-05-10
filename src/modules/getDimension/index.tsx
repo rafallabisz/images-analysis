@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import imageUtility from 'utils/ImageUtility';
 
 type Coordinates = {
@@ -6,9 +6,18 @@ type Coordinates = {
   y: number;
 };
 
+type Bg = {
+  img: HTMLImageElement;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};
+
 const GetDimension: React.FC = () => {
   let canvasRef = useRef<HTMLCanvasElement>(null);
-  const [context, setContext] = React.useState<CanvasRenderingContext2D | null>(null);
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const [bg, setBg] = useState<Bg | null>(null);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files;
@@ -18,20 +27,21 @@ const GetDimension: React.FC = () => {
       img.src = imgLink;
       img.onload = () => {
         context?.drawImage(img, 0, 0, img.width, img.height);
+        setBg({ img, x: 0, y: 0, w: img.width, h: img.height });
       };
     } else return;
   };
 
   useEffect(() => {
     let mouseDown: boolean = false;
-    let last_mouse: Coordinates = { x: 0, y: 0 };
+    let lastMouse: Coordinates = { x: 0, y: 0 };
     let mouse: Coordinates = { x: 0, y: 0 };
     let canvasOffsetLeft: number = 0;
     let canvasOffsetTop: number = 0;
 
     function handleMouseDown(evt: MouseEvent) {
       mouseDown = true;
-      last_mouse = {
+      lastMouse = {
         x: evt.clientX - canvasOffsetLeft,
         y: evt.clientY - canvasOffsetTop,
       };
@@ -53,14 +63,17 @@ const GetDimension: React.FC = () => {
           y: evt.clientY - canvasOffsetTop,
         };
 
-        // context.drawImage(canvasImg as CanvasImageSource, 0, 0);
         context.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
         context.beginPath();
-        const width = mouse.x - last_mouse.x;
-        const height = mouse.y - last_mouse.y;
-        context.rect(last_mouse.x, last_mouse.y, width, height);
+        const width = mouse.x - lastMouse.x;
+        const height = mouse.y - lastMouse.y;
+        context.rect(lastMouse.x, lastMouse.y, width, height);
         context.strokeStyle = 'black';
-        context.lineWidth = 2;
+        context.lineWidth = 1;
+        if (bg) {
+          const { img, x, y, w, h } = bg;
+          context.drawImage(img, x, y, w, h);
+        }
         context.stroke();
       }
     }
@@ -85,7 +98,7 @@ const GetDimension: React.FC = () => {
         canvasRef.current.removeEventListener('mousemove', handleMouseMove);
       }
     };
-  }, [context]);
+  }, [bg, context]);
 
   return (
     <div>
