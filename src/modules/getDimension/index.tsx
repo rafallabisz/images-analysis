@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import imageUtility from 'utils/ImageUtility';
 
 type Coordinates = {
@@ -7,17 +7,19 @@ type Coordinates = {
 };
 
 const GetDimension: React.FC = () => {
-  const [loadImage, setLoadImage] = useState<string>();
-
   let canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = React.useState<CanvasRenderingContext2D | null>(null);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files;
     if (file) {
-      const image = await imageUtility.toBase64(file[0]);
-      setLoadImage(image);
-    }
+      const imgLink = await imageUtility.toBase64(file[0]);
+      const img = new Image();
+      img.src = imgLink;
+      img.onload = () => {
+        context?.drawImage(img, 0, 0, img.width, img.height);
+      };
+    } else return;
   };
 
   useEffect(() => {
@@ -51,6 +53,7 @@ const GetDimension: React.FC = () => {
           y: evt.clientY - canvasOffsetTop,
         };
 
+        // context.drawImage(canvasImg as CanvasImageSource, 0, 0);
         context.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
         context.beginPath();
         const width = mouse.x - last_mouse.x;
@@ -96,9 +99,8 @@ const GetDimension: React.FC = () => {
           onChange={(e) => handleImageChange(e)}
         />
       </div>
-      {loadImage && <img src={loadImage} alt="load-images" />}
       <div>
-        <canvas ref={canvasRef} width={640} height={425} style={{ border: '2px solid black' }} />
+        <canvas ref={canvasRef} width={280} height={170} style={{ border: '2px solid black' }} />
       </div>
     </div>
   );
