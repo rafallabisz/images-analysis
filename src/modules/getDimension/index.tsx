@@ -65,6 +65,8 @@ const GetDimension: React.FC = () => {
         C: { x: lastMouse.x, y: mouse.y },
         D: { x: mouse.x, y: mouse.y },
       });
+      const isSinglePoint = lastMouse.x === mouse.x && lastMouse.y === mouse.y;
+      drawRect(isSinglePoint);
     }
 
     function handleMouseMove(evt: MouseEvent) {
@@ -73,11 +75,20 @@ const GetDimension: React.FC = () => {
           x: evt.clientX - canvasOffset.left,
           y: evt.clientY - canvasOffset.top,
         };
+        drawRect();
+      }
+    }
 
+    function drawRect(isSinglePoint?: boolean) {
+      if (context) {
         context.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
         context.beginPath();
-        const width = mouse.x - lastMouse.x;
-        const height = mouse.y - lastMouse.y;
+        let width = mouse.x - lastMouse.x;
+        let height = mouse.y - lastMouse.y;
+        if (isSinglePoint) {
+          width = 1;
+          height = 1;
+        }
         context.rect(lastMouse.x, lastMouse.y, width, height);
         context.strokeStyle = 'black';
         context.lineWidth = 1;
