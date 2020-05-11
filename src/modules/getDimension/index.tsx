@@ -1,15 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Bg, CoordinatesOfMouse, CanvasOffset, CoordinatesOfRectangle } from './GetDimensionTypes';
+import './GetDimensionStyles.sass';
 import LoadImage from './LoadImage';
 import ViewCoordinates from './ViewCoordinates';
+
+const initCooardinatesOfRectangle = {
+  A: { x: 0, y: 0 },
+  B: { x: 0, y: 0 },
+  C: { x: 0, y: 0 },
+  D: { x: 0, y: 0 },
+};
 
 const GetDimension: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [bg, setBg] = useState<Bg | null>(null);
-  const [coordinatesOfRectangle, setCoordinatesOfRectangle] = useState<CoordinatesOfRectangle>();
+  const [coordinatesOfRectangle, setCoordinatesOfRectangle] = useState<CoordinatesOfRectangle>(
+    initCooardinatesOfRectangle,
+  );
+  const [isClickDrawRect, setIsClickDrawRect] = useState<boolean>(false);
 
   const handleDrawOnImage = (imgLink: string) => {
+    setCoordinatesOfRectangle(initCooardinatesOfRectangle);
+    setIsClickDrawRect(false);
+
+    canvasRef.current!.width = 300;
+    canvasRef.current!.height = 300;
+
     const img = new Image();
     img.src = imgLink;
     img.onload = () => {
@@ -56,6 +73,7 @@ const GetDimension: React.FC = () => {
 
     function handleMouseUp(evt: MouseEvent) {
       mouseDown = false;
+      setIsClickDrawRect(true);
       setCoordinatesOfRectangle({
         A: { x: lastMouse.x, y: lastMouse.y },
         B: { x: mouse.x, y: lastMouse.y },
@@ -109,11 +127,11 @@ const GetDimension: React.FC = () => {
   }, [bg, context]);
 
   return (
-    <div>
+    <div className="container-optional">
       LOAD IMAGE
       <LoadImage handleDrawOnImage={handleDrawOnImage} />
-      <canvas ref={canvasRef} style={{ border: '2px solid red' }} />
-      <ViewCoordinates coordinatesOfRectangle={coordinatesOfRectangle} />
+      <canvas ref={canvasRef} width={0} height={0} />
+      {isClickDrawRect && <ViewCoordinates coordinatesOfRectangle={coordinatesOfRectangle} />}
     </div>
   );
 };
