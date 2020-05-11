@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bg, Coordinates, CanvasOffset } from './GetDimensionTypes';
+import { Bg, Coordinates, CanvasOffset, CoordinatesOfRectangle } from './GetDimensionTypes';
 import LoadImage from './LoadImage';
+import ViewCoordinates from './ViewCoordinates';
 
 const GetDimension: React.FC = () => {
-  let canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [bg, setBg] = useState<Bg | null>(null);
+  const [coordinatesOfRectangle, setCoordinatesOfRectangle] = useState<CoordinatesOfRectangle>();
 
   const handleDrawOnImage = (imgLink: string) => {
     const img = new Image();
@@ -37,6 +39,12 @@ const GetDimension: React.FC = () => {
 
     function handleMouseUp(evt: MouseEvent) {
       mouseDown = false;
+      setCoordinatesOfRectangle({
+        A: { x: lastMouse.x, y: lastMouse.y },
+        B: { x: mouse.x, y: lastMouse.y },
+        C: { x: lastMouse.x, y: mouse.y },
+        D: { x: mouse.x, y: mouse.y },
+      });
     }
 
     function handleMouseMove(evt: MouseEvent) {
@@ -87,9 +95,8 @@ const GetDimension: React.FC = () => {
     <div>
       LOAD IMAGE
       <LoadImage handleDrawOnImage={handleDrawOnImage} />
-      <div>
-        <canvas ref={canvasRef} width={250} height={170} style={{ border: '2px solid black' }} />
-      </div>
+      <canvas ref={canvasRef} width={250} height={170} style={{ border: '2px solid black' }} />
+      <ViewCoordinates coordinatesOfRectangle={coordinatesOfRectangle} />
     </div>
   );
 };
