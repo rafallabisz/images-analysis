@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bg, Coordinates, CanvasOffset, CoordinatesOfRectangle } from './GetDimensionTypes';
+import { Bg, CoordinatesOfMouse, CanvasOffset, CoordinatesOfRectangle } from './GetDimensionTypes';
 import LoadImage from './LoadImage';
 import ViewCoordinates from './ViewCoordinates';
 
@@ -13,15 +13,32 @@ const GetDimension: React.FC = () => {
     const img = new Image();
     img.src = imgLink;
     img.onload = () => {
-      context?.drawImage(img, 0, 0, img.width, img.height);
-      setBg({ img, x: 0, y: 0, w: img.width, h: img.height });
+      const { newWidth, newHeight } = scaleImage(img);
+      context?.drawImage(img, 0, 0, newWidth, newHeight);
+      setBg({ img, x: 0, y: 0, w: newWidth, h: newHeight });
+    };
+  };
+
+  const scaleImage = (img: HTMLImageElement) => {
+    const ratio = img.width / img.height;
+    let newWidth = canvasRef.current!.width;
+    let newHeight = newWidth / ratio;
+    if (newHeight > canvasRef.current!.height) {
+      newHeight = canvasRef.current!.height;
+      newWidth = newHeight * ratio;
+    }
+    canvasRef.current!.width = newWidth;
+    canvasRef.current!.height = newHeight;
+    return {
+      newWidth,
+      newHeight,
     };
   };
 
   useEffect(() => {
     let mouseDown: boolean = false;
-    let lastMouse: Coordinates = { x: 0, y: 0 };
-    let mouse: Coordinates = { x: 0, y: 0 };
+    let lastMouse: CoordinatesOfMouse = { x: 0, y: 0 };
+    let mouse: CoordinatesOfMouse = { x: 0, y: 0 };
     let canvasOffset: CanvasOffset = { left: 0, top: 0 };
 
     function handleMouseDown(evt: MouseEvent) {
@@ -95,7 +112,7 @@ const GetDimension: React.FC = () => {
     <div>
       LOAD IMAGE
       <LoadImage handleDrawOnImage={handleDrawOnImage} />
-      <canvas ref={canvasRef} width={250} height={170} style={{ border: '2px solid black' }} />
+      <canvas ref={canvasRef} style={{ border: '2px solid red' }} />
       <ViewCoordinates coordinatesOfRectangle={coordinatesOfRectangle} />
     </div>
   );

@@ -1,4 +1,4 @@
-export type Coordinates = {
+export type CoordinatesOfMouse = {
   x: number;
   y: number;
 };
