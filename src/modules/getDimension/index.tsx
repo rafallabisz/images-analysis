@@ -3,6 +3,7 @@ import { Bg, CoordinatesOfMouse, CanvasOffset, CoordinatesOfRectangle } from './
 import './GetDimensionStyles.sass';
 import LoadImage from './LoadImage';
 import ViewCoordinates from './ViewCoordinates';
+import imageUtility from 'utils/ImageUtility';
 
 const initCooardinatesOfRectangle = {
   A: { x: 0, y: 0 },
@@ -30,25 +31,9 @@ const GetDimension: React.FC = () => {
     const img = new Image();
     img.src = imgLink;
     img.onload = () => {
-      const { newWidth, newHeight } = scaleImage(img);
+      const { newWidth, newHeight } = imageUtility.scaleImage(img, canvasRef);
       context?.drawImage(img, 0, 0, newWidth, newHeight);
       setBg({ img, x: 0, y: 0, w: newWidth, h: newHeight });
-    };
-  };
-
-  const scaleImage = (img: HTMLImageElement) => {
-    const ratio = img.width / img.height;
-    let newWidth = canvasRef.current!.width;
-    let newHeight = newWidth / ratio;
-    if (newHeight > canvasRef.current!.height) {
-      newHeight = canvasRef.current!.height;
-      newWidth = newHeight * ratio;
-    }
-    canvasRef.current!.width = newWidth;
-    canvasRef.current!.height = newHeight;
-    return {
-      newWidth,
-      newHeight,
     };
   };
 
