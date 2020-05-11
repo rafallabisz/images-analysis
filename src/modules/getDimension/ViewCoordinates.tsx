@@ -6,14 +6,23 @@ interface ViewCoordinatesProps {
 }
 
 const ViewCoordinates: React.FC<ViewCoordinatesProps> = ({ coordinatesOfRectangle }) => {
+  const initCooardinatesOfRectangle = {
+    A: { x: 0, y: 0 },
+    B: { x: 0, y: 0 },
+    C: { x: 0, y: 0 },
+    D: { x: 0, y: 0 },
+  };
+  const { A, B, C, D } = coordinatesOfRectangle ? coordinatesOfRectangle : initCooardinatesOfRectangle;
   return (
     <>
       {coordinatesOfRectangle && (
         <div>
-          <span>{`A(${coordinatesOfRectangle.A.x}, ${coordinatesOfRectangle.A.y}); `}</span>
-          <span>{`B(${coordinatesOfRectangle.B.x}, ${coordinatesOfRectangle.B.y}); `}</span>
-          <span>{`C(${coordinatesOfRectangle.C.x}, ${coordinatesOfRectangle.C.y}); `}</span>
-          <span>{`D(${coordinatesOfRectangle.D.x}, ${coordinatesOfRectangle.D.y}); `}</span>
+          <div>{`{ `}</div>
+          <div>{`"A": { "x": ${A.x}, "y": ${A.y}},`}</div>
+          <div>{`"B": { "x": ${B.x}, "y": ${B.y}},`}</div>
+          <div>{`"C": { "x": ${C.x}, "y": ${C.y}},`}</div>
+          <div>{`"D": { "x": ${D.x}, "y": ${D.y}}`}</div>
+          <div>{`}`}</div>
         </div>
       )}
     </>
